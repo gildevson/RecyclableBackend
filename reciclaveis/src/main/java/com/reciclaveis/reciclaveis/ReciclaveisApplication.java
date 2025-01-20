@@ -14,8 +14,11 @@ public class ReciclaveisApplication {
 		// Carregar as variáveis do .env
 		Dotenv dotenv = Dotenv.configure()
 				.directory("reciclaveis")
-				.filename(".env")// Diretório relativo (raiz do projeto)
+				.filename(".env") // Diretório relativo (raiz do projeto)
 				.load();
+
+		// Validar as variáveis do .env
+		validarVariaveis(dotenv);
 
 		// Testar se as variáveis foram carregadas
 		System.out.println("DB_HOST: " + dotenv.get("DB_HOST"));
@@ -33,5 +36,15 @@ public class ReciclaveisApplication {
 
 		// Iniciar a aplicação Spring Boot
 		SpringApplication.run(ReciclaveisApplication.class, args);
+	}
+
+	private static void validarVariaveis(Dotenv dotenv) {
+		String[] variaveisObrigatorias = {"DB_HOST", "DB_PORT", "DB_NAME", "DB_USERNAME", "DB_PASSWORD"};
+
+		for (String variavel : variaveisObrigatorias) {
+			if (dotenv.get(variavel) == null || dotenv.get(variavel).isEmpty()) {
+				throw new IllegalStateException("Erro: A variável de ambiente '" + variavel + "' está ausente ou vazia. Verifique o arquivo .env.");
+			}
+		}
 	}
 }
