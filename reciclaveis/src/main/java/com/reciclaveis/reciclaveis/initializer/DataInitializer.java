@@ -31,8 +31,8 @@ public class DataInitializer implements CommandLineRunner {
 
             // Criar usuário com permissão
             User adminUser = new User();
-            adminUser.setName("João Silva");
-            adminUser.setEmail("joao@email.com");
+            adminUser.setName("João Antonio");
+            adminUser.setEmail("Antonio@email.com");
             adminUser.setPassword("senhaSegura123"); // Recomenda-se criptografar a senha
             adminUser.setPermissions(Set.of(adminPermission));
             userRepository.save(adminUser);
