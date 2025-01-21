@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ReciclaveisApplicationTests {
+public class ReciclaveisApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// Teste básico para verificar se o contexto carrega corretamente
 	}
-
 }
