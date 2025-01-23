@@ -6,7 +6,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "users") // Evita conflito com a palavra reservada "user" no PostgreSQL
+@Table(name = "users") // Evita conflito com a palavra reservada "user" no PostgreSQL ajuda bastante
 public class User {
 
     @Id
