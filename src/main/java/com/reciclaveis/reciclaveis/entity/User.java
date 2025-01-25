@@ -26,5 +26,5 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
-    private Set<Permission> permissions; // Mapeamento com a entidade Permission
+    private Set<Permission> permissions; // Mapeamento com a entidade Permission  indica que este atributo é uma coleção de permissões associadas a um
 }
