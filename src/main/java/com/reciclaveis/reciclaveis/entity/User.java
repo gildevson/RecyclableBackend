@@ -20,6 +20,8 @@ public class User {
 
     private String password;
 
+
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_permissions",
