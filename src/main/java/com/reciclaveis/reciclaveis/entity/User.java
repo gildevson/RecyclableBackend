@@ -6,7 +6,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "users") // Evita conflito com a palavra reservada "user" no PostgreSQL ajuda bastante
+@Table(name = "users") // Evita conflito com a palavra reservada "user" no PostgreSQL
 public class User {
 
     @Id
@@ -20,13 +20,11 @@ public class User {
 
     private String password;
 
-
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_permissions",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
-    private Set<Permission> permissions; // Mapeamento com a entidade Permission  indica que este atributo é uma coleção de permissões associadas a um
+    private Set<Permission> permissions; // Mapeamento com a entidade Permission
 }

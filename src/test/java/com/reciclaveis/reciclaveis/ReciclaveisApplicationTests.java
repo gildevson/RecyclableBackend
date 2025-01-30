@@ -8,6 +8,6 @@ public class ReciclaveisApplicationTests {
 
 	@Test
 	void contextLoads() {
-		// Teste básico para verificar se o contexto carrega corretamente
+		// Verifica se o contexto do Spring Boot carrega corretamente
 	}
 }
