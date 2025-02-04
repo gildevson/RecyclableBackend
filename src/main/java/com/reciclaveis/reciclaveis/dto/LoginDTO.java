@@ -3,6 +3,7 @@ package com.reciclaveis.reciclaveis.dto;
 public class LoginDTO {
     private String email;
     private String password;
+    private String name;
 
     // Getters e Setters
     public String getEmail() {
@@ -19,5 +20,13 @@ public class LoginDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

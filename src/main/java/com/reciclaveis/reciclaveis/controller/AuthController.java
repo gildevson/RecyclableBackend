@@ -59,6 +59,7 @@ public class AuthController {
                 response.put("status", HttpStatus.OK.value());
                 response.put("message", "Login bem-sucedido");
                 response.put("token", token);
+                response.put("name", loginDTO.getName());
                 response.put("user", loginDTO.getEmail());
                 System.out.println("JWT Secret: " + jwtSecret);
 

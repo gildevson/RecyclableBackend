@@ -15,8 +15,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable()) // Desativa CSRF para APIs RESTful
+        http.csrf(csrf -> csrf.disable()) // Desativa CSRF para APIs RESTful
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Configura CORS
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login", "/public/**").permitAll() // Permite acesso às rotas públicas

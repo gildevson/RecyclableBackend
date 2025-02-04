@@ -17,7 +17,7 @@ public class AuthService {
     public boolean validateLogin(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
+        
         boolean isMatch = passwordEncoder.matches(password, user.getPassword());
 
         // Logs para depuração
