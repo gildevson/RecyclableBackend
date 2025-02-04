@@ -21,8 +21,7 @@ public class AuthValidator {
     // Remova ou altere o endpoint duplicado
     @PostMapping("/validate")
     public ResponseEntity<?> validateOnly(@RequestBody LoginDTO loginDTO) {
-        if (loginDTO.getEmail() == null || loginDTO.getEmail().isEmpty() ||
-                loginDTO.getPassword() == null || loginDTO.getPassword().isEmpty()) {
+        if (loginDTO.getEmail() == null || loginDTO.getEmail().isEmpty() || loginDTO.getPassword() == null || loginDTO.getPassword().isEmpty()) {
             return ResponseEntity.badRequest().body("Email e senha são obrigatórios.");
         }
 
