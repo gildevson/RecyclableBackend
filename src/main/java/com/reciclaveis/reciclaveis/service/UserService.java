@@ -16,11 +16,13 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
+
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public void registerUser(String email, String rawPassword, String name) {
-        // Validações básicas
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("O email é obrigatório.");
         }
@@ -39,7 +41,7 @@ public class UserService {
 
         // Gera o hash da senha
         String hashedPassword = encoder.encode(rawPassword);
-        logger.info("Hash gerado para a senha: {}", hashedPassword);
+        logger.info("Hash gerado para a senha do email {}: {}", email, hashedPassword);
 
         // Cria e salva o usuário
         User newUser = new User();

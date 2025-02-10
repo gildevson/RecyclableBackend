@@ -22,12 +22,7 @@ public class ReciclaveisApplication {
 		validarVariaveis(dotenv);
 
 		// Configurar variáveis como propriedades do sistema
-		System.setProperty("jwt.secret", dotenv.get("jwt.secret"));
-		System.setProperty("DB_HOST", dotenv.get("DB_HOST"));
-		System.setProperty("DB_PORT", dotenv.get("DB_PORT"));
-		System.setProperty("DB_NAME", dotenv.get("DB_NAME"));
-		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
-		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
+		setarPropriedades(dotenv);
 
 		// Logs para depuração
 		logger.info("Iniciando a aplicação com as variáveis de ambiente carregadas.");
@@ -42,8 +37,25 @@ public class ReciclaveisApplication {
 
 		for (String variavel : variaveisObrigatorias) {
 			if (dotenv.get(variavel) == null || dotenv.get(variavel).isEmpty()) {
-				throw new IllegalStateException("Erro: A variável de ambiente '" + variavel + "' está ausente ou vazia. Verifique o arquivo .env.");
+				throw new MissingEnvironmentVariableException("Erro: A variável de ambiente '" + variavel + "' está ausente ou vazia. Verifique o arquivo .env.");
 			}
 		}
+	}
+
+
+
+	private static void setarPropriedades(Dotenv dotenv) {
+		System.setProperty("jwt.secret", dotenv.get("jwt.secret"));
+		System.setProperty("DB_HOST", dotenv.get("DB_HOST"));
+		System.setProperty("DB_PORT", dotenv.get("DB_PORT"));
+		System.setProperty("DB_NAME", dotenv.get("DB_NAME"));
+		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
+		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
+	}
+}
+
+class MissingEnvironmentVariableException extends RuntimeException {
+	public MissingEnvironmentVariableException(String message) {
+		super(message);
 	}
 }
