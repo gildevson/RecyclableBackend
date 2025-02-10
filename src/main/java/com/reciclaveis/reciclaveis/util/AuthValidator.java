@@ -1,6 +1,5 @@
 package com.reciclaveis.reciclaveis.util;
 
-
 import com.reciclaveis.reciclaveis.dto.LoginDTO;
 import com.reciclaveis.reciclaveis.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -14,7 +14,7 @@ public class ReciclaveisApplication {
 	public static void main(String[] args) {
 		// Carregar variáveis do .env
 		Dotenv dotenv = Dotenv.configure()
-				.directory("reciclaveis") // Caminho do .env
+				.directory(".") // Diretório atual
 				.filename(".env")
 				.load();
 
