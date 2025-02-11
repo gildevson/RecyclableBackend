@@ -42,8 +42,6 @@ public class ReciclaveisApplication {
 		}
 	}
 
-
-
 	private static void setarPropriedades(Dotenv dotenv) {
 		System.setProperty("jwt.secret", dotenv.get("jwt.secret"));
 		System.setProperty("DB_HOST", dotenv.get("DB_HOST"));

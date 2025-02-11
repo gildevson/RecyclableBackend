@@ -29,5 +29,9 @@ public class AuthService {
         return isMatch;
     }
 
-
+    public String getUserNameByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(User::getName)
+                .orElse("Usuário desconhecido");  // Retorna "Usuário desconhecido" se não encontrar
+    }
 }
