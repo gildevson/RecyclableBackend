@@ -27,3 +27,13 @@ While most of the inheritance is fine, it also inherits unwanted elements like `
 To prevent this, the project POM contains empty overrides for these elements.
 If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
 
+### 
+
+* [config → Contém classes relacionadas à configuração da aplicação, como configurações do Spring Boot, beans, segurança, etc.](...)
+* [controller → Contém os controladores (Controllers) da aplicação, responsáveis por receber as requisições HTTP e direcioná-las para os serviços apropriados.](...)
+* [dto (Data Transfer Object) → Contém classes utilizadas para transferir dados entre diferentes camadas da aplicação, sem expor diretamente as entidades do banco de dados.](...)
+* [entity → Contém as classes que representam as entidades do banco de dados, geralmente mapeadas com anotações JPA (@Entity, @Table, @Id, etc.).](...)
+* [initializer → Provavelmente contém classes de inicialização, como configuração de dados iniciais ou eventos que devem ocorrer no início da aplicação.](...)
+* [repository → Contém as interfaces que fazem a comunicação com o banco de dados, geralmente estendendo JpaRepository ou CrudRepository.](...)
+* [service → Contém as regras de negócio da aplicação. As classes aqui servem como intermediárias entre os controllers e os repositories.](...)
+* [util → Contém classes auxiliares ou utilitárias, como funções de formatação, manipulação de datas, validações, etc.](...)
