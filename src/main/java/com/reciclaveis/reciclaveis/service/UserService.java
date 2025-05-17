@@ -7,7 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,7 +18,6 @@ public class UserService {
 
     @Autowired
     private BCryptPasswordEncoder encoder;
-
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -51,5 +50,10 @@ public class UserService {
         userRepository.save(newUser);
 
         logger.info("Usuário {} registrado com sucesso.", email);
+    }
+
+    // ✅ Novo método para listar todos os usuários
+    public List<User> findAll() {
+        return userRepository.findAllWithPermissions(); // <-- Usa JOIN FETCH
     }
 }

@@ -8,24 +8,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ReciclaveisApplication {
-
 	private static final Logger logger = LoggerFactory.getLogger(ReciclaveisApplication.class);
-
 	public static void main(String[] args) {
 		// Carregar variáveis do .env
 		Dotenv dotenv = Dotenv.configure()
 				.directory(".") // Diretório atual
 				.filename(".env")
 				.load();
+		validarVariaveis(dotenv); // Validar variáveis do .env
+		setarPropriedades(dotenv); // Configurar variáveis como propriedades do sistema
 
-		// Validar variáveis do .env
-		validarVariaveis(dotenv);
 
-		// Configurar variáveis como propriedades do sistema
-		setarPropriedades(dotenv);
-
-		// Logs para depuração
-		logger.info("Iniciando a aplicação com as variáveis de ambiente carregadas.");
+		logger.info("Iniciando a aplicação com as variáveis de ambiente carregadas."); // Logs para depuração
 		logger.info("DB_HOST: {}", dotenv.get("DB_HOST"));
 		logger.info("DB_PORT: {}", dotenv.get("DB_PORT"));
 

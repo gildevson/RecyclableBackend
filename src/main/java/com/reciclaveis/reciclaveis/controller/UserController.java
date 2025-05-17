@@ -1,19 +1,17 @@
 package com.reciclaveis.reciclaveis.controller;
-
+import com.reciclaveis.reciclaveis.dto.UserDTO;
 import com.reciclaveis.reciclaveis.service.UserService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3000") // Permite requisições do frontend
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
     @Autowired
     private UserService userService;
 
@@ -29,5 +27,15 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> listAllUsers() {
+        List<UserDTO> users = userService.findAll()
+                .stream()
+                .map(UserDTO::new)
+                .toList();
+
+        return ResponseEntity.ok(users);
     }
 }

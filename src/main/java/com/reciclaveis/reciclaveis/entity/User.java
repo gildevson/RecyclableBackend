@@ -9,16 +9,13 @@ import java.util.Set;
 @Entity
 @Table(name = "users") // Evita conflito com a palavra reservada "user" no PostgreSQL
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
 
     @Column(unique = true, nullable = false)
     private String email;
-
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
