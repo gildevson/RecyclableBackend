@@ -18,7 +18,7 @@ public class ReciclaveisApplication {
 				.filename(".env")
 				.load();
 		validarVariaveis(dotenv); // Validar variáveis do .env
-		setarPropriedades(dotenv); // Configurar variáveis como propriedades do sistema
+		setarPropriedades(dotenv); // Configurar variáveis como propriedades do sistema ajuda 
 
 
 		logger.info("Iniciando a aplicação com as variáveis de ambiente carregadas."); // Logs para depuração
