@@ -10,7 +10,7 @@ import lombok.Data;
 public class UserPermission {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) ddd
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
