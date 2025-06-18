@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Service
 public class AuthService {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -38,5 +39,10 @@ public class AuthService {
         return userRepository.findByEmail(email)
                 .map(User::getName)
                 .orElse("Usuário desconhecido");
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado para o email: " + email));
     }
 }

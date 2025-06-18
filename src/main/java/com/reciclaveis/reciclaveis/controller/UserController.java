@@ -1,10 +1,14 @@
 package com.reciclaveis.reciclaveis.controller;
 
 import com.reciclaveis.reciclaveis.dto.UserDTO;
+import com.reciclaveis.reciclaveis.entity.User;
 import com.reciclaveis.reciclaveis.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.reciclaveis.reciclaveis.util.AuthenticatedUserProvider;
+
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +17,12 @@ import java.util.Map;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    // Injeção via construtor
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     // Endpoint para registrar um novo usuário
     @PostMapping("/register")
@@ -34,7 +42,6 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 
     // Endpoint para listar todos os usuários com suas permissões
     @GetMapping
