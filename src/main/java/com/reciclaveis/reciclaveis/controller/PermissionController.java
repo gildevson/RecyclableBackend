@@ -2,7 +2,6 @@ package com.reciclaveis.reciclaveis.controller;
 
 import com.reciclaveis.reciclaveis.entity.Permission;
 import com.reciclaveis.reciclaveis.repository.PermissionRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +18,7 @@ public class PermissionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Permission>> getAllPermissions() {
-        List<Permission> permissions = permissionRepository.findAll();
-        return ResponseEntity.ok(permissions);
+    public List<Permission> getAllPermissions() {
+        return permissionRepository.findAll();
     }
 }
