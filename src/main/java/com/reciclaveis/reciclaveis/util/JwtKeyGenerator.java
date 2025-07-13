@@ -2,8 +2,6 @@ package com.reciclaveis.reciclaveis.util;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-
-
 import java.util.Base64;
 
 public class JwtKeyGenerator {

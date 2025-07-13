@@ -5,8 +5,9 @@ import com.reciclaveis.reciclaveis.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
+import com.reciclaveis.reciclaveis.util.JwtService;
+
 
 @Service
 public class AuthService {
@@ -45,4 +46,15 @@ public class AuthService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado para o email: " + email));
     }
+
+    @Autowired
+    private JwtService jwtService;
+
+    public User getUserFromToken(String token) {
+        String email = jwtService.extractUsername(token);
+        return getUserByEmail(email);
+    }
+
+
+
 }

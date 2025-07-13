@@ -8,7 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.*;
 
 @Service
@@ -17,13 +16,18 @@ public class UserService {
     private final UserRepository userRepository;
     private final PermissionRepository permissionRepository;
     private final BCryptPasswordEncoder encoder;
+    private final AuthService authService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, PermissionRepository permissionRepository, BCryptPasswordEncoder encoder) {
+    public UserService(UserRepository userRepository,
+                       PermissionRepository permissionRepository,
+                       BCryptPasswordEncoder encoder,
+                       AuthService authService) {
         this.userRepository = userRepository;
         this.permissionRepository = permissionRepository;
         this.encoder = encoder;
+        this.authService = authService;
     }
 
     /**
@@ -88,5 +92,40 @@ public class UserService {
 
         user.getPermissions().add(permission);
         userRepository.save(user);
+    }
+
+    /**
+     * Exclui um usuário se quem está autenticado possuir permissão total (ID 1).
+     */
+    public void deleteUserIfAuthorized(Long userIdToDelete, String token) {
+        String cleanedToken = token.replace("Bearer ", "").trim();
+        User requestingUser = authService.getUserFromToken(cleanedToken);
+
+        boolean hasPermissionTotal = requestingUser.getPermissions().stream()
+                .anyMatch(p -> p.getId() == 1);
+
+        System.out.println("USUARIO AUTENTICADO: " + requestingUser.getEmail());
+        System.out.println("Permissões encontradas: ");
+
+        requestingUser.getPermissions().forEach(p -> System.out.println(" - Permissão ID: " + p.getId()));
+
+        System.out.println("Token recebido: " + token);
+        System.out.println("Usuário autenticado: " + requestingUser.getEmail());
+        System.out.println("ID do usuário autenticado: " + requestingUser.getId());
+        System.out.println("ID do usuário a ser excluído: " + userIdToDelete);
+
+        if (!hasPermissionTotal) {
+            throw new SecurityException("Você não tem permissão para excluir usuários.");
+        }
+
+        if (requestingUser.getId().equals(userIdToDelete)) {
+            throw new SecurityException("Você não pode excluir seu próprio usuário.");
+        }
+
+        if (userIdToDelete == 1L) {
+            throw new SecurityException("Você não pode excluir o usuário administrador padrão.");
+        }
+
+        userRepository.deleteById(userIdToDelete);
     }
 }

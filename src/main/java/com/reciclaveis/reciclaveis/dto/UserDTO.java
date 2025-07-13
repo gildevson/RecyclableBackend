@@ -2,7 +2,6 @@ package com.reciclaveis.reciclaveis.dto;
 
 import com.reciclaveis.reciclaveis.entity.User;
 import lombok.Data;
-
 import java.util.Set;
 import java.util.stream.Collectors;
 

@@ -1,14 +1,9 @@
 package com.reciclaveis.reciclaveis.controller;
 
 import com.reciclaveis.reciclaveis.dto.UserDTO;
-import com.reciclaveis.reciclaveis.entity.User;
 import com.reciclaveis.reciclaveis.service.UserService;
-import com.reciclaveis.reciclaveis.util.AuthenticatedUserProvider;
-
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 
@@ -66,5 +61,22 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String token) {
+        try {
+            userService.deleteUserIfAuthorized(id, token);
+            return ResponseEntity.ok("Usuário excluído com sucesso.");
+        } catch (SecurityException e) {
+            return ResponseEntity.status(403).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir usuário: " + e.getMessage());
+        }
+    }
+
+
+
 }
 

@@ -6,7 +6,6 @@ import com.reciclaveis.reciclaveis.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 @Component
