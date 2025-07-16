@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.reciclaveis.reciclaveis.util.JwtService;
 
 
+
 @Service
 public class AuthService {
 

@@ -1,26 +1,33 @@
 package com.reciclaveis.reciclaveis.util;
 
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.util.Base64;
 import java.util.Date;
 
+
 @Component
 public class JwtService {
 
-    private final String SECRET_KEY = "j98h2h3kjh23kjh4kjh23kj4h234kjh23h4kjh234kjh234kjh==";
-// Ex: "uy0k4Py1J...=="
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     private final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 horas
+
+    private byte[] getDecodedKey() {
+        return Base64.getDecoder().decode(jwtSecret);
+    }
 
     public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS256, Base64.getDecoder().decode(SECRET_KEY))
+                .signWith(SignatureAlgorithm.HS256, getDecodedKey())
                 .compact();
     }
 
@@ -39,7 +46,7 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(Base64.getDecoder().decode(SECRET_KEY))
+                .setSigningKey(getDecodedKey())
                 .parseClaimsJws(token)
                 .getBody();
     }

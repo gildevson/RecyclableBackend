@@ -39,8 +39,10 @@ public class UserController {
     }
 
     // Endpoint para listar todos os usuários com suas permissões
+    // Endpoint para listar todos os usuários com suas permissões
     @GetMapping
-    public ResponseEntity<List<UserDTO>> listAllUsers() {
+    public ResponseEntity<List<UserDTO>> listAllUsers(
+            @RequestHeader(value = "Authorization", required = false) String token) {
         List<UserDTO> users = userService.findAll()
                 .stream()
                 .map(UserDTO::new)
@@ -48,6 +50,7 @@ public class UserController {
 
         return ResponseEntity.ok(users);
     }
+
 
     // Endpoint para atribuir uma permissão a um usuário
     @PostMapping("/{userId}/permissions/{permissionId}")
