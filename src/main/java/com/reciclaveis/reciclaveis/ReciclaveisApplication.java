@@ -45,6 +45,13 @@ public class ReciclaveisApplication {
 		System.setProperty("DB_NAME", dotenv.get("DB_NAME"));
 		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
 		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
+
+		// ⚠️ Novas variáveis para envio de email
+		System.setProperty("EMAIL_HOST", dotenv.get("EMAIL_HOST"));
+		System.setProperty("EMAIL_PORT", dotenv.get("EMAIL_PORT"));
+		System.setProperty("EMAIL_USERNAME", dotenv.get("EMAIL_USERNAME"));
+		System.setProperty("EMAIL_PASSWORD", dotenv.get("EMAIL_PASSWORD"));
+		System.setProperty("EMAIL_PROTOCOL", dotenv.get("EMAIL_PROTOCOL"));
 	}
 }
 

@@ -1,34 +1,45 @@
+package com.reciclaveis.reciclaveis.util;
+
 import com.reciclaveis.reciclaveis.entity.User;
 import com.reciclaveis.reciclaveis.repository.UserRepository;
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import java.util.Base64;
 
 @Component
 public class AuthenticatedUserProvider {
 
-    @Autowired
-    private UserRepository userRepository;
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticatedUserProvider.class);
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
 
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+    public AuthenticatedUserProvider(UserRepository userRepository, JwtService jwtService) {
+        this.userRepository = userRepository;
+        this.jwtService = jwtService;
+    }
 
+    /**
+     * Extrai o usuário autenticado com base no token JWT enviado no cabeçalho Authorization.
+     *
+     * @param request Requisição HTTP contendo o cabeçalho Authorization
+     * @return Usuário autenticado ou null se token inválido ou usuário não encontrado
+     */
     public User getUserFromRequest(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7); // remove "Bearer "
-            String email = Jwts.parser()
-                    .setSigningKey(Base64.getDecoder().decode(jwtSecret)) // ⚠️ necessário!
-                    .parseClaimsJws(token)
-                    .getBody()
-                    .getSubject();
+        String authorizationHeader = request.getHeader("Authorization");
 
-            return userRepository.findByEmail(email).orElse(null);
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7); // Remove "Bearer "
+
+            try {
+                String email = jwtService.extractUsername(token);
+                return userRepository.findByEmail(email).orElse(null);
+            } catch (Exception e) {
+                logger.error("Erro ao extrair usuário do token: {}", e.getMessage());
+                return null;
+            }
         }
+
         return null;
     }
 }

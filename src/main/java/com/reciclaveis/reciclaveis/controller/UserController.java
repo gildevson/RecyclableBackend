@@ -74,12 +74,11 @@ public class UserController {
             return ResponseEntity.ok("Usuário excluído com sucesso.");
         } catch (SecurityException e) {
             return ResponseEntity.status(403).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body("Erro: " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao excluir usuário: " + e.getMessage());
         }
     }
 
-
-
 }
-

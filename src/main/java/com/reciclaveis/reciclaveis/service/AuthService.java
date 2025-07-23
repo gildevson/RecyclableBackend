@@ -2,13 +2,11 @@ package com.reciclaveis.reciclaveis.service;
 
 import com.reciclaveis.reciclaveis.entity.User;
 import com.reciclaveis.reciclaveis.repository.UserRepository;
+import com.reciclaveis.reciclaveis.util.JwtService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
-import com.reciclaveis.reciclaveis.util.JwtService;
-
-
 
 @Service
 public class AuthService {
@@ -16,10 +14,13 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JwtService jwtService;
+
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public boolean validateLogin(String email, String password) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
+        Optional<User> userOptional = userRepository.findByEmailWithPermissions(email);
 
         if (!userOptional.isPresent()) {
             System.out.println("Usuário não encontrado para o email: " + email);
@@ -37,6 +38,7 @@ public class AuthService {
         return isMatch;
     }
 
+
     public String getUserNameByEmail(String email) {
         return userRepository.findByEmail(email)
                 .map(User::getName)
@@ -44,18 +46,25 @@ public class AuthService {
     }
 
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmailWithPermissions(email)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado para o email: " + email));
     }
 
-    @Autowired
-    private JwtService jwtService;
+
 
     public User getUserFromToken(String token) {
-        String email = jwtService.extractUsername(token);
-        return getUserByEmail(email);
-    }
+        try {
+            String email = jwtService.extractUsername(token);
+            if (email == null) {
+                throw new SecurityException("Token inválido: email ausente.");
+            }
 
+            return userRepository.findByEmailWithPermissions(email)
+                    .orElseThrow(() -> new SecurityException("Usuário não encontrado para o token."));
+        } catch (Exception e) {
+            throw new SecurityException("Falha ao processar o token: " + e.getMessage(), e);
+        }
+    }
 
 
 }

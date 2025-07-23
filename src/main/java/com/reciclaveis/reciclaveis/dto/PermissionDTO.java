@@ -9,9 +9,9 @@ public class PermissionDTO {
     private String name;
     private String description;
 
-    public PermissionDTO(Permission permission) {
-        this.id = permission.getId();
-        this.name = permission.getName();
-        this.description = permission.getDescription();
+    public PermissionDTO(Permission p) {
+        this.id = p.getId();
+        this.name = p.getName();
+        this.description = p.getDescription();
     }
 }

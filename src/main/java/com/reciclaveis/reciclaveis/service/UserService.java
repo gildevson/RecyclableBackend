@@ -31,9 +31,6 @@ public class UserService {
         this.authService = authService;
     }
 
-    /**
-     * Registra um novo usuário com ou sem permissão definida.
-     */
     public void registerUser(String email, String rawPassword, String name, Long permissionId) {
         if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("O email é obrigatório.");
@@ -57,16 +54,24 @@ public class UserService {
         newUser.setPassword(hashedPassword);
         newUser.setName(name);
 
-        // Define permissões
         Set<Permission> permissions = new HashSet<>();
+
         if (permissionId == null) {
+            logger.warn("permissionId não fornecido, usando permissão padrão 'usuario'");
             Permission defaultPermission = permissionRepository.findByDescription("usuario")
                     .orElseThrow(() -> new IllegalArgumentException("Permissão padrão 'usuario' não encontrada"));
             permissions.add(defaultPermission);
         } else {
-            Permission permission = permissionRepository.findById(permissionId)
-                    .orElseThrow(() -> new IllegalArgumentException("Permissão não encontrada"));
-            permissions.add(permission);
+            logger.info("Buscando permissão com ID {}", permissionId);
+
+            Optional<Permission> optionalPermission = permissionRepository.findById(permissionId);
+            if (optionalPermission.isEmpty()) {
+                logger.error("Permissão com ID {} não encontrada no banco", permissionId);
+                throw new IllegalArgumentException("Permissão com ID " + permissionId + " não encontrada.");
+            }
+
+            permissions.add(optionalPermission.get());
+            logger.info("Permissão {} adicionada ao novo usuário.", optionalPermission.get().getDescription());
         }
 
         newUser.setPermissions(permissions);
@@ -74,16 +79,10 @@ public class UserService {
         logger.info("Usuário {} registrado com sucesso.", email);
     }
 
-    /**
-     * Retorna todos os usuários com suas permissões carregadas.
-     */
     public List<User> findAll() {
         return userRepository.findAllWithPermissions();
     }
 
-    /**
-     * Atribui uma nova permissão a um usuário existente.
-     */
     public void addPermissionToUser(Long userId, Long permissionId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
@@ -96,38 +95,56 @@ public class UserService {
         logger.info("Permissão {} adicionada ao usuário {}", permissionId, userId);
     }
 
-    /**
-     * Exclui um usuário se quem está autenticado possuir permissão total (ID 1).
-     */
     public void deleteUserIfAuthorized(Long userIdToDelete, String token) {
-        String cleanedToken = token.replace("Bearer ", "").trim();
-        User requestingUser = authService.getUserFromToken(cleanedToken);
+        try {
+            String cleanedToken = token.replace("Bearer ", "").trim();
+            logger.info("Token limpo recebido: {}", cleanedToken);
 
-        boolean isAdmin = requestingUser.getPermissions().stream()
-                .anyMatch(p -> p.getId().equals(1L));
+            User requestingUser = authService.getUserFromToken(cleanedToken);
+            logger.info("Usuário autenticado: {} (ID: {})", requestingUser.getEmail(), requestingUser.getId());
+            logger.info("ID do usuário a excluir: {}", userIdToDelete);
+            logger.info("ID do usuário autenticado: {}", requestingUser.getId());
+            if (requestingUser.getId().equals(userIdToDelete)) {
+                throw new SecurityException("Você não pode excluir seu próprio usuário.");
+            }
 
-        logger.info("Requisição de exclusão recebida:");
-        logger.info(" - Token do usuário: {}", token);
-        logger.info(" - Usuário autenticado: {} (ID: {})", requestingUser.getEmail(), requestingUser.getId());
-        logger.info(" - ID do usuário a ser excluído: {}", userIdToDelete);
-        logger.info(" - Permissões do usuário autenticado:");
-        requestingUser.getPermissions().forEach(p ->
-                logger.info("   • Permissão ID: {} - {}", p.getId(), p.getName())
-        );
+            if (userIdToDelete.equals(1L)) {
+                logger.warn("Tentativa de excluir o usuário administrador padrão.");
+                throw new SecurityException("Você não pode excluir o usuário administrador padrão.");
+            }
 
-        if (!isAdmin) {
-            throw new SecurityException("Você não tem permissão para excluir usuários.");
+            Set<Permission> permissions = requestingUser.getPermissions();
+
+            logger.info("Permissões carregadas do usuário:");
+            permissions.forEach(p -> logger.info(" - Permissão: id={}, descricao={}", p.getId(), p.getDescription()));
+
+            boolean isAdmin = permissions.stream()
+                    .anyMatch(p -> p.getId() != null && (
+                            p.getId().equals(1L) ||
+                                    p.getDescription().toLowerCase().contains("total")
+                    ));
+
+            if (!isAdmin) {
+                logger.warn("Usuário não tem permissão para excluir.");
+                throw new SecurityException("Você não tem permissão para excluir usuários.");
+            }
+
+            logger.info("Tentando excluir usuário com ID: {}", userIdToDelete);
+            try {
+                userRepository.deleteById(userIdToDelete);
+                logger.info("Usuário com ID {} excluído com sucesso por {}", userIdToDelete, requestingUser.getEmail());
+            } catch (Exception ex) {
+                logger.error("Erro ao tentar excluir usuário com ID {}: {}", userIdToDelete, ex.getMessage(), ex);
+                throw ex;
+            }
+
+
+        } catch (SecurityException se) {
+            logger.error("Erro de segurança ao excluir usuário: {}", se.getMessage());
+            throw se;
+        } catch (Exception e) {
+            logger.error("Erro inesperado ao excluir usuário: {}", e.getMessage(), e);
+            throw new RuntimeException("Erro interno ao excluir o usuário. Detalhes no log.");
         }
-
-        if (requestingUser.getId().equals(userIdToDelete)) {
-            throw new SecurityException("Você não pode excluir seu próprio usuário.");
-        }
-
-        if (userIdToDelete.equals(1L)) {
-            throw new SecurityException("Você não pode excluir o usuário administrador padrão.");
-        }
-
-        userRepository.deleteById(userIdToDelete);
-        logger.info("Usuário com ID {} excluído com sucesso por {}", userIdToDelete, requestingUser.getEmail());
     }
 }

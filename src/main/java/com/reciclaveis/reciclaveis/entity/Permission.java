@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Set;
 
@@ -24,5 +25,6 @@ public class Permission {
     private String description;
 
     @ManyToMany(mappedBy = "permissions")
+    @JsonIgnore // impede o loop na serialização
     private Set<User> users;
 }
