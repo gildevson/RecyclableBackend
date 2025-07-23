@@ -10,53 +10,74 @@ import java.util.Objects;
 
 @SpringBootApplication
 public class ReciclaveisApplication {
-	private static final Logger logger = LoggerFactory.getLogger(ReciclaveisApplication.class);
-	public static void main(String[] args) {
-		// Carregar variáveis do .env
-		Dotenv dotenv = Dotenv.configure()
-				.directory(".") // Diretório atual
-				.filename(".env")
-				.load();
-		validarVariaveis(dotenv); // Validar variáveis do .env
-		setarPropriedades(dotenv); // Configurar variáveis como propriedades do sistema ajuda 
+
+    private static final Logger logger = LoggerFactory.getLogger(ReciclaveisApplication.class);
+
+    public static void main(String[] args) {
+        // Carregar variáveis do .env
+        Dotenv dotenv = Dotenv.configure()
+                .directory(".") // Diretório atual
+                .filename(".env")
+                .load();
+
+        validarVariaveis(dotenv);      // Validar se todas existem
+        setarPropriedades(dotenv);     // Definir como propriedades do sistema
+
+        logger.info("Iniciando a aplicação com as variáveis de ambiente carregadas.");
+        logger.info("DB_HOST: {}", dotenv.get("DB_HOST"));
+        logger.info("DB_PORT: {}", dotenv.get("DB_PORT"));
+
+        SpringApplication.run(ReciclaveisApplication.class, args);
+    }
+
+    private static void validarVariaveis(Dotenv dotenv) {
+        String[] obrigatorias = {
+                "DB_HOST", "DB_PORT", "DB_NAME", "DB_USERNAME", "DB_PASSWORD",
+                "jwt.secret", "EMAIL_HOST", "EMAIL_PORT", "EMAIL_USERNAME", "EMAIL_PASSWORD", "EMAIL_PROTOCOL"
+        };
+
+        for (String var : obrigatorias) {
+            if (dotenv.get(var) == null || Objects.requireNonNull(dotenv.get(var)).isEmpty()) {
+                throw new MissingEnvironmentVariableException("Erro: A variável '" + var + "' está ausente ou vazia.");
+            }
+        }
+    }
+
+    private static void setarPropriedades(Dotenv dotenv) {
+        // JWT
+        System.setProperty("jwt.secret", dotenv.get("jwt.secret"));
+
+        // Datasource (montar a URL manualmente)
+        String dbUrl = String.format("jdbc:postgresql://%s:%s/%s",
+                dotenv.get("DB_HOST"),
+                dotenv.get("DB_PORT"),
+                dotenv.get("DB_NAME"));
+
+        System.setProperty("spring.datasource.url", dbUrl);
+        System.setProperty("spring.datasource.username", dotenv.get("DB_USERNAME"));
+        System.setProperty("spring.datasource.password", dotenv.get("DB_PASSWORD"));
+
+        // Email
+        // Email (usando prefixos que o Spring entende)
+        System.setProperty("spring.mail.host", dotenv.get("EMAIL_HOST"));
+        System.setProperty("spring.mail.port", dotenv.get("EMAIL_PORT"));
+        System.setProperty("spring.mail.username", dotenv.get("EMAIL_USERNAME"));
+        System.setProperty("spring.mail.password", dotenv.get("EMAIL_PASSWORD"));
+        System.setProperty("spring.mail.protocol", dotenv.get("EMAIL_PROTOCOL"));
+        System.setProperty("spring.mail.properties.mail.smtp.auth", "true");
+        System.setProperty("spring.mail.properties.mail.smtp.starttls.enable", "true");
+        System.setProperty("spring.mail.properties.mail.smtp.ssl.enable", "true"); // necessário para a porta 465
 
 
-		logger.info("Iniciando a aplicação com as variáveis de ambiente carregadas."); // Logs para depuração
-		logger.info("DB_HOST: {}", dotenv.get("DB_HOST"));
-		logger.info("DB_PORT: {}", dotenv.get("DB_PORT"));
-
-		SpringApplication.run(ReciclaveisApplication.class, args);
-	}
-
-	private static void validarVariaveis(Dotenv dotenv) {
-		String[] variaveisObrigatorias = {"DB_HOST", "DB_PORT", "DB_NAME", "DB_USERNAME", "DB_PASSWORD", "jwt.secret"};
-
-		for (String variavel : variaveisObrigatorias) {
-			if (dotenv.get(variavel) == null || Objects.requireNonNull(dotenv.get(variavel)).isEmpty()) {
-				throw new MissingEnvironmentVariableException("Erro: A variável de ambiente '" + variavel + "' está ausente ou vazia. Verifique o arquivo .env.");
-			}
-		}
-	}
-
-	private static void setarPropriedades(Dotenv dotenv) {
-		System.setProperty("jwt.secret", dotenv.get("jwt.secret"));
-		System.setProperty("DB_HOST", dotenv.get("DB_HOST"));
-		System.setProperty("DB_PORT", dotenv.get("DB_PORT"));
-		System.setProperty("DB_NAME", dotenv.get("DB_NAME"));
-		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
-		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
-
-		// ⚠️ Novas variáveis para envio de email
-		System.setProperty("EMAIL_HOST", dotenv.get("EMAIL_HOST"));
-		System.setProperty("EMAIL_PORT", dotenv.get("EMAIL_PORT"));
-		System.setProperty("EMAIL_USERNAME", dotenv.get("EMAIL_USERNAME"));
-		System.setProperty("EMAIL_PASSWORD", dotenv.get("EMAIL_PASSWORD"));
-		System.setProperty("EMAIL_PROTOCOL", dotenv.get("EMAIL_PROTOCOL"));
-	}
+        // Profile (opcional)
+        if (dotenv.get("spring.profiles.active") != null) {
+            System.setProperty("spring.profiles.active", dotenv.get("spring.profiles.active"));
+        }
+    }
 }
 
 class MissingEnvironmentVariableException extends RuntimeException {
-	public MissingEnvironmentVariableException(String message) {
-		super(message);
-	}
+    public MissingEnvironmentVariableException(String message) {
+        super(message);
+    }
 }
