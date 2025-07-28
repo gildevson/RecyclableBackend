@@ -17,37 +17,37 @@ import java.util.UUID;
 public class PasswordResetService {
 
     @Autowired
-    private PasswordResetTokenRepository tokenRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private PasswordResetTokenRepository tokenRepository;
 
     @Autowired
     private EmailService emailService;
 
-    // 1. Gerar token e enviar email
-    @Transactional
     public void criarTokenDeRedefinicao(String email) {
-        Optional<User> optionalUser = userRepository.findByEmail(email);
-        if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("Usuário não encontrado para o email: " + email);
-        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        User user = optionalUser.get();
-
+        // Cria token
         String token = UUID.randomUUID().toString();
-        LocalDateTime expiration = LocalDateTime.now().plusMinutes(15);
 
+        // Salva no banco
         PasswordResetToken resetToken = new PasswordResetToken();
         resetToken.setToken(token);
         resetToken.setUser(user);
-        resetToken.setExpirationDate(expiration);
-
+        resetToken.setExpiryDate(LocalDateTime.now().plusHours(1));
         tokenRepository.save(resetToken);
 
-        String link = "http://localhost:3000/reset-password?token=" + token;
-        emailService.sendEmail(user.getEmail(), "Redefinição de senha",
-                "Clique no link para redefinir sua senha: " + link);
+        // Gera link
+        String resetLink = "http://localhost:3000/reset-password?token=" + token;
+
+        // Corpo do e-mail
+        String corpo = "Olá,\n\nClique no link abaixo para redefinir sua senha:\n"
+                + resetLink + "\n\nEste link é válido por 1 hora.";
+
+        // Envia o e-mail
+        emailService.sendEmail(email, "Redefinição de Senha", corpo);
     }
 
     // 2. Validar token recebido

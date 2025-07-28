@@ -50,4 +50,8 @@ public class PasswordResetToken {
     public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
+
+    public void setExpiryDate(LocalDateTime localDateTime) {
+
+    }
 }
