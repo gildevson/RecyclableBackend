@@ -8,21 +8,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/password")
 public class PasswordResetController {
 
     @Autowired
     private PasswordResetService passwordResetService;
 
-    @PostMapping("/forgot-password")
+    @PostMapping("/forgot")
     public ResponseEntity<Void> forgotPassword(@RequestBody ForgotPasswordRequestDTO dto) {
         passwordResetService.criarTokenDeRedefinicao(dto.getEmail());
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/reset-password")
+    @PostMapping("/reset")
     public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordDTO dto) {
-        passwordResetService.redefinirSenha(dto.getToken(), dto.getNewPassword());
+        if (dto.getPassword() == null || dto.getConfirmPassword() == null || !dto.getPassword().equals(dto.getConfirmPassword())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        passwordResetService.redefinirSenha(dto.getToken(), dto.getPassword());
         return ResponseEntity.ok().build();
     }
 }

@@ -2,7 +2,8 @@ package com.reciclaveis.reciclaveis.dto;
 
 public class ResetPasswordDTO {
    private String token;
-   private String newPassword;
+   private String password;
+   private String confirmPassword;
 
    public String getToken() {
       return token;
@@ -12,11 +13,19 @@ public class ResetPasswordDTO {
       this.token = token;
    }
 
-   public String getNewPassword() {
-      return newPassword;
+   public String getPassword() {
+      return password;
    }
 
-   public void setNewPassword(String newPassword) {
-      this.newPassword = newPassword;
+   public void setPassword(String password) {
+      this.password = password;
+   }
+
+   public String getConfirmPassword() {
+      return confirmPassword;
+   }
+
+   public void setConfirmPassword(String confirmPassword) {
+      this.confirmPassword = confirmPassword;
    }
 }

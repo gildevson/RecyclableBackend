@@ -18,7 +18,15 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/users", "/users/**", "/public/**", "/permissions").permitAll()
+                        .requestMatchers(
+                                "/auth/login",
+                                "/auth/forgot-password",
+                                "/auth/reset-password",
+                                "/users",
+                                "/users/**",
+                                "/public/**",
+                                "/permissions"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
@@ -28,16 +36,17 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(Arrays.asList("http://localhost:*"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // ✅ porta explícita
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-        config.setExposedHeaders(Arrays.asList("Authorization")); // <-- importante!
+        config.setExposedHeaders(Arrays.asList("Authorization"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
 
 
     @Bean
