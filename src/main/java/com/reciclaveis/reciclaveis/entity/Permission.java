@@ -27,4 +27,6 @@ public class Permission {
     @ManyToMany(mappedBy = "permissions")
     @JsonIgnore // impede o loop na serialização
     private Set<User> users;
+
+
 }
