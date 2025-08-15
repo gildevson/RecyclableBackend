@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -22,4 +24,7 @@ public class Cliente {
     private String clienteEmail;
     private String clienteCelular;
     private String cliente;
+
+    @CreationTimestamp
+    private LocalDateTime createAt;
 }
