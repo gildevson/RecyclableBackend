@@ -20,7 +20,7 @@ public class ReciclaveisApplication {
                 .filename(".env")
                 .load();
 
-        validarVariaveis(dotenv);      // Validar se todas existem
+        validarVariaveis(dotenv);      // Validar se todas existem.
         setarPropriedades(dotenv);     // Definir como propriedades do sistema
 
         logger.info("Iniciando a aplicação com as variáveis de ambiente carregadas.");
