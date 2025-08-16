@@ -18,9 +18,7 @@ public class UserService {
     private final PermissionRepository permissionRepository;
     private final BCryptPasswordEncoder encoder;
     private final AuthService authService;
-
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
-
     public UserService(UserRepository userRepository,
                        PermissionRepository permissionRepository,
                        BCryptPasswordEncoder encoder,
