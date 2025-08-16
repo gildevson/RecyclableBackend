@@ -25,7 +25,9 @@ public class SecurityConfig {
                                 "/users",
                                 "/users/**",
                                 "/public/**",
-                                "/permissions"
+                                "/permissions",
+                                "/cliente",
+                                "/clientes**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );
