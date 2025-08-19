@@ -31,6 +31,4 @@ public class ClienteController {
         return ResponseEntity.created(location).body(saved);
 
     }
-
-
 }

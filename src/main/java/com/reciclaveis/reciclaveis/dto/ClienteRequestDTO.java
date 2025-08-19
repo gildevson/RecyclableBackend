@@ -1,6 +1,6 @@
 package com.reciclaveis.reciclaveis.dto;
 
-public class ClienteDTO {
+public class ClienteRequestDTO {
 
-    // DTO
+
 }
