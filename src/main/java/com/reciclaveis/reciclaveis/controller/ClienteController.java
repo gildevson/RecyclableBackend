@@ -22,10 +22,18 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<ClienteResponseDTO> create(@Valid @RequestBody ClienteRequestDTO dto) {
+    public ResponseEntity create(@Valid @RequestBody ClienteRequestDTO dto) {
         // verifica se já existe CNPJ
-        if (dto.clienteCnpj() != null && clienteRepository.existsByClienteCnpj(dto.clienteCnpj())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        //if (dto.clienteCnpj() != null && clienteRepository.existsByClienteCnpj(dto.clienteCnpj())) {
+        //    return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        //}
+
+        if(dto.clienteCnpj() != null) {
+            System.out.println("cnpj já cadastrado!");
+
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CNPJ JÁ CADASTRADO");
+
         }
 
         // mapeia DTO -> entidade
