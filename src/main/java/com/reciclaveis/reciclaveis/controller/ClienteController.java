@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.net.URI;
 import java.util.List;
 
@@ -23,12 +24,9 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity create(@Valid @RequestBody ClienteRequestDTO dto) {
-        // verifica se já existe CNPJ
-        //if (dto.clienteCnpj() != null && clienteRepository.existsByClienteCnpj(dto.clienteCnpj())) {
-        //    return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        //}
 
-        if(dto.clienteCnpj() != null) {
+
+        if (dto.clienteCnpj() != null) {
             System.out.println("cnpj já cadastrado!");
 
 
