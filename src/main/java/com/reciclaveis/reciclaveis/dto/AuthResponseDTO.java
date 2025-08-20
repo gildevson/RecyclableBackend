@@ -58,7 +58,7 @@ public class AuthResponseDTO {
         return permissions;
     }
 
-    public void setPermissions(List<PermissionDTO> permissions) {
+    public void setPermissions(List<PermissionDTO> permissions)  {
         this.permissions = permissions;
     }
 
