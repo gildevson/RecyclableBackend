@@ -23,18 +23,13 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity create(@Valid @RequestBody ClienteRequestDTO dto) {
+    public ResponseEntity<?> create(@Valid @RequestBody ClienteRequestDTO dto) {
 
-
-        if (dto.clienteCnpj() != null) {
-            System.out.println("cnpj já cadastrado!");
-
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CNPJ JÁ CADASTRADO");
-
+        // valida duplicidade
+        if (dto.clienteCnpj() != null && clienteRepository.existsByClienteCnpj(dto.clienteCnpj())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("CNPJ já cadastrado");
         }
 
-        // mapeia DTO -> entidade
         Cliente entity = new Cliente();
         entity.setClienteNome(dto.clienteNome());
         entity.setClienteCnpj(dto.clienteCnpj());
@@ -44,7 +39,6 @@ public class ClienteController {
 
         Cliente saved = clienteRepository.save(entity);
 
-        // mapeia entidade -> ResponseDTO
         ClienteResponseDTO response = new ClienteResponseDTO(
                 saved.getId(),
                 saved.getClienteNome(),

@@ -1,6 +1,5 @@
 package com.reciclaveis.reciclaveis.controller;
 
-
 import com.reciclaveis.reciclaveis.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
