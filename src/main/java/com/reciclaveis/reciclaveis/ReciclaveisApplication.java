@@ -10,9 +10,7 @@ import java.util.Objects;
 
 @SpringBootApplication
 public class ReciclaveisApplication {
-
     private static final Logger logger = LoggerFactory.getLogger(ReciclaveisApplication.class);
-
     public static void main(String[] args) {
         // Carregar variáveis do .env
         Dotenv dotenv = Dotenv.configure()
