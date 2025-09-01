@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import java.util.Objects;
 
 @SpringBootApplication
@@ -51,9 +50,6 @@ public class ReciclaveisApplication {
         System.setProperty("spring.datasource.url", dbUrl);
         System.setProperty("spring.datasource.username", dotenv.get("DB_USERNAME"));
         System.setProperty("spring.datasource.password", dotenv.get("DB_PASSWORD"));
-
-        // Email
-        // Email (usando prefixos que o Spring entende)
         System.setProperty("spring.mail.host", dotenv.get("EMAIL_HOST"));
         System.setProperty("spring.mail.port", dotenv.get("EMAIL_PORT"));
         System.setProperty("spring.mail.username", dotenv.get("EMAIL_USERNAME"));
