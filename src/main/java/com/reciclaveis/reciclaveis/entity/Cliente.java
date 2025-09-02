@@ -15,16 +15,25 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID) // Hibernate 6+
     private UUID id;
-
     private String clienteNome;
 
     @Column(unique = true)
     private String clienteCnpj;
-
     private String clienteCpf;
     private String clienteTelefone;
     private String clienteEmail;
     private String clienteCelular;
+    private String clienteEndereco;
+    private String clienteBairro;
+    private String clienteCidade;
+    private String clienteEstado;
+    private String clienteNacionalidade;
+    private String clienteNumeroCasa;
+    private String clienteComplemento;
+    private String clienteInscricaoMunicipal;
+    private String ClienteInscricaoEstadual;
+    private String clienteSituacao;
+
 
     @CreationTimestamp
     private LocalDateTime createdAt; // renomeado

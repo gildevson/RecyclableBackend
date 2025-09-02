@@ -7,8 +7,21 @@ public record ClienteResponseDTO(
         UUID id,
         String clienteNome,
         String clienteCnpj,
-        String clienteEmail,
+        String clienteCpf,
         String clienteTelefone,
+        String clienteEmail,
         String clienteCelular,
+        String clienteEndereco,
+        String clienteBairro,
+        String clienteCidade,
+        String clienteEstado,
+        String clienteNacionalidade,
+        String clienteNumeroCasa,
+        String clienteComplemento,
+        String clienteInscricaoMunicipal,
+        String clienteEstadual,
+        String clienteSituacao,
         LocalDateTime createdAt
+
+
 ) {}

@@ -8,5 +8,15 @@ public record ClienteRequestDTO(
         @NotBlank String clienteCnpj,
         @Email String clienteEmail,
         String clienteTelefone,
-        String clienteCelular
+        String clienteCelular,
+        String clienteEndereco,
+        String clienteBairro,
+        String clienteCidade,
+        String clienteEstado,
+        String clienteNacionalidade,
+        String clienteNumeroCasa,
+        String clienteComplemento,
+        String clienteInscricaoMunicipal,
+        String clienteInscricaoEstadual,
+        String clienteSituacao
 ) {}

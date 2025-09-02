@@ -35,9 +35,18 @@ public class ClienteController {
         entity.setClienteEmail(dto.clienteEmail());
         entity.setClienteTelefone(dto.clienteTelefone());
         entity.setClienteCelular(dto.clienteCelular());
+        entity.setClienteBairro(dto.clienteBairro());
+        entity.setClienteCidade(dto.clienteCidade());
+        entity.setClienteEstado(dto.clienteEstado());
+        entity.setClienteNacionalidade(dto.clienteNacionalidade());
+        entity.setClienteNumeroCasa(dto.clienteNumeroCasa());
+        entity.setClienteComplemento(dto.clienteNumeroCasa());
+        entity.setClienteInscricaoMunicipal(dto.clienteInscricaoMunicipal());
+        entity.setClienteInscricaoEstadual(dto.clienteInscricaoEstadual());
+        entity.setClienteSituacao(dto.clienteSituacao());
+
 
         Cliente saved = clienteRepository.save(entity);
-
         ClienteResponseDTO response = new ClienteResponseDTO(
                 saved.getId(),
                 saved.getClienteNome(),
@@ -46,6 +55,7 @@ public class ClienteController {
                 saved.getClienteTelefone(),
                 saved.getClienteCelular(),
                 saved.getCreatedAt()
+
         );
 
         return ResponseEntity
