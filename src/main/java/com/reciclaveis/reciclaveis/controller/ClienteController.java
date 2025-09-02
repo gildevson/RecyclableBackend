@@ -35,12 +35,13 @@ public class ClienteController {
         entity.setClienteEmail(dto.clienteEmail());
         entity.setClienteTelefone(dto.clienteTelefone());
         entity.setClienteCelular(dto.clienteCelular());
-        entity.setClienteBairro(dto.clienteBairro());
+        entity.setClienteEndereco(dto.clienteEndereco());
         entity.setClienteCidade(dto.clienteCidade());
+        entity.setClienteBairro(dto.clienteBairro());
         entity.setClienteEstado(dto.clienteEstado());
         entity.setClienteNacionalidade(dto.clienteNacionalidade());
         entity.setClienteNumeroCasa(dto.clienteNumeroCasa());
-        entity.setClienteComplemento(dto.clienteNumeroCasa());
+        entity.setClienteComplemento(dto.clienteComplemento());
         entity.setClienteInscricaoMunicipal(dto.clienteInscricaoMunicipal());
         entity.setClienteInscricaoEstadual(dto.clienteInscricaoEstadual());
         entity.setClienteSituacao(dto.clienteSituacao());
@@ -54,7 +55,20 @@ public class ClienteController {
                 saved.getClienteEmail(),
                 saved.getClienteTelefone(),
                 saved.getClienteCelular(),
-                saved.getCreatedAt()
+                saved.getClienteEndereco(),
+                saved.getClienteCidade(),
+                saved.getClienteBairro(),
+                saved.getClienteEstado(),
+                saved.getClienteNacionalidade(),
+                saved.getClienteNumeroCasa(),
+                saved.getClienteComplemento(),
+                saved.getClienteInscricaoMunicipal(),
+                saved.getClienteCpf(),
+                saved.getClienteInscricaoEstadual(),
+                saved.getClienteInscricaoMunicipal(),
+                saved.getClienteSituacao(),
+                saved.getCreatedAt(),
+
 
         );
 
@@ -73,6 +87,18 @@ public class ClienteController {
                         c.getClienteEmail(),
                         c.getClienteTelefone(),
                         c.getClienteCelular(),
+                        c.getClienteEndereco(),
+                        c.getClienteCidade(),
+                        c.getClienteBairro(),
+                        c.getClienteEstado(),
+                        c.getClienteNacionalidade(),
+                        c.getClienteNumeroCasa(),
+                        c.getClienteComplemento(),
+                        c.getClienteInscricaoMunicipal(),
+                        c.getClienteCpf(),
+                        c.getClienteInscricaoEstadual(),
+                        c.getClienteInscricaoMunicipal(),
+                        c.getClienteSituacao(),
                         c.getCreatedAt()
                 ))
                 .toList();
