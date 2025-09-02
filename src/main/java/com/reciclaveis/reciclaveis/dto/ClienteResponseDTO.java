@@ -21,7 +21,7 @@ public record ClienteResponseDTO(
         String clienteInscricaoMunicipal,
         String clienteEstadual,
         String clienteSituacao,
-        LocalDateTime createdAt
+        String situacao, LocalDateTime createdAt
 
 
 ) {}

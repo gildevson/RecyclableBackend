@@ -67,7 +67,7 @@ public class ClienteController {
                 saved.getClienteInscricaoEstadual(),
                 saved.getClienteInscricaoMunicipal(),
                 saved.getClienteSituacao(),
-                saved.getCreatedAt(),
+                saved.getCreatedAt()
 
 
         );
