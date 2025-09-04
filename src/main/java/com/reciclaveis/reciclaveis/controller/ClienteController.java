@@ -68,8 +68,6 @@ public class ClienteController {
                 saved.getClienteInscricaoMunicipal(),
                 saved.getClienteSituacao(),
                 saved.getCreatedAt()
-
-
         );
 
         return ResponseEntity
