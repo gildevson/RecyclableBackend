@@ -18,8 +18,7 @@ public class Cliente {
     private String clienteNome;
 
     @Column(unique = true)
-    private String clienteCnpj;
-    private String clienteCpf;
+    private String clienteCnpjCpf;
     private String clienteTelefone;
     private String clienteEmail;
     private String clienteCelular;

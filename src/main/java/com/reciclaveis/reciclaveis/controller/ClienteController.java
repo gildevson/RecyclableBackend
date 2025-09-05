@@ -25,13 +25,13 @@ public class ClienteController {
     public ResponseEntity<?> create(@Valid @RequestBody ClienteRequestDTO dto) {
 
         // valida duplicidade
-        if (dto.clienteCnpj() != null && clienteRepository.existsByClienteCnpj(dto.clienteCnpj())) {
+        if (dto.clienteCnpjCpf() != null && clienteRepository.existsByClienteCnpjCpf(dto.clienteCnpjCpf())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("CNPJ já cadastrado");
         }
 
         Cliente entity = new Cliente();
         entity.setClienteNome(dto.clienteNome());
-        entity.setClienteCnpj(dto.clienteCnpj());
+        entity.setClienteCnpjCpf(dto.clienteCnpjCpf());
         entity.setClienteEmail(dto.clienteEmail());
         entity.setClienteTelefone(dto.clienteTelefone());
         entity.setClienteCelular(dto.clienteCelular());
@@ -46,12 +46,11 @@ public class ClienteController {
         entity.setClienteInscricaoEstadual(dto.clienteInscricaoEstadual());
         entity.setClienteSituacao(dto.clienteSituacao());
 
-
         Cliente saved = clienteRepository.save(entity);
         ClienteResponseDTO response = new ClienteResponseDTO(
                 saved.getId(),
                 saved.getClienteNome(),
-                saved.getClienteCnpj(),
+                saved.getClienteCnpjCpf(),
                 saved.getClienteEmail(),
                 saved.getClienteTelefone(),
                 saved.getClienteCelular(),
@@ -63,7 +62,6 @@ public class ClienteController {
                 saved.getClienteNumeroCasa(),
                 saved.getClienteComplemento(),
                 saved.getClienteInscricaoMunicipal(),
-                saved.getClienteCpf(),
                 saved.getClienteInscricaoEstadual(),
                 saved.getClienteInscricaoMunicipal(),
                 saved.getClienteSituacao(),
@@ -81,7 +79,7 @@ public class ClienteController {
                 .map(c -> new ClienteResponseDTO(
                         c.getId(),
                         c.getClienteNome(),
-                        c.getClienteCnpj(),
+                        c.getClienteCnpjCpf(),
                         c.getClienteEmail(),
                         c.getClienteTelefone(),
                         c.getClienteCelular(),
@@ -93,7 +91,6 @@ public class ClienteController {
                         c.getClienteNumeroCasa(),
                         c.getClienteComplemento(),
                         c.getClienteInscricaoMunicipal(),
-                        c.getClienteCpf(),
                         c.getClienteInscricaoEstadual(),
                         c.getClienteInscricaoMunicipal(),
                         c.getClienteSituacao(),

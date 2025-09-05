@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 public record ClienteResponseDTO(
         UUID id,
         String clienteNome,
-        String clienteCnpj,
-        String clienteCpf,
+        String clienteCnpjCpf,
         String clienteTelefone,
         String clienteEmail,
         String clienteCelular,
