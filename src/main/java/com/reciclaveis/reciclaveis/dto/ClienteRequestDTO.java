@@ -3,6 +3,8 @@ package com.reciclaveis.reciclaveis.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+import java.time.LocalDateTime;
+
 public record ClienteRequestDTO(
         @NotBlank String clienteNome,
         @NotBlank String clienteCnpjCpf,
@@ -18,5 +20,6 @@ public record ClienteRequestDTO(
         String clienteComplemento,
         String clienteInscricaoMunicipal,
         String clienteInscricaoEstadual,
-        String clienteSituacao
+        String clienteSituacao,
+        LocalDateTime createdAt
 ) {}

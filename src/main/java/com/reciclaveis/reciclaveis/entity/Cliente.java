@@ -30,7 +30,7 @@ public class Cliente {
     private String clienteNumeroCasa;
     private String clienteComplemento;
     private String clienteInscricaoMunicipal;
-    private String ClienteInscricaoEstadual;
+    private String clienteInscricaoEstadual;
     private String clienteSituacao;
 
 

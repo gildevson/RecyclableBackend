@@ -45,27 +45,28 @@ public class ClienteController {
         entity.setClienteInscricaoMunicipal(dto.clienteInscricaoMunicipal());
         entity.setClienteInscricaoEstadual(dto.clienteInscricaoEstadual());
         entity.setClienteSituacao(dto.clienteSituacao());
+        entity.setCreatedAt(dto.createdAt());
 
         Cliente saved = clienteRepository.save(entity);
         ClienteResponseDTO response = new ClienteResponseDTO(
                 saved.getId(),
                 saved.getClienteNome(),
                 saved.getClienteCnpjCpf(),
-                saved.getClienteEmail(),
-                saved.getClienteTelefone(),
+                saved.getClienteEmail(),              // email 1º
+                saved.getClienteTelefone(),           // telefone 2º
                 saved.getClienteCelular(),
                 saved.getClienteEndereco(),
-                saved.getClienteCidade(),
                 saved.getClienteBairro(),
+                saved.getClienteCidade(),
                 saved.getClienteEstado(),
                 saved.getClienteNacionalidade(),
                 saved.getClienteNumeroCasa(),
                 saved.getClienteComplemento(),
                 saved.getClienteInscricaoMunicipal(),
-                saved.getClienteInscricaoEstadual(),
-                saved.getClienteInscricaoMunicipal(),
+                saved.getClienteInscricaoEstadual(), // nome correto
                 saved.getClienteSituacao(),
-                saved.getCreatedAt()
+                saved.getClienteSituacao(),
+                saved.getCreatedAt()                 // último
         );
 
         return ResponseEntity
