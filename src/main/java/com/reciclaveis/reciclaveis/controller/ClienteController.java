@@ -49,7 +49,7 @@ public class ClienteController {
 
         Cliente saved = clienteRepository.save(entity);
         ClienteResponseDTO response = new ClienteResponseDTO(
-                saved.getId(),
+                saved.getClienteid(),
                 saved.getClienteNome(),
                 saved.getClienteCnpjCpf(),
                 saved.getClienteEmail(),              // email 1º
@@ -65,12 +65,11 @@ public class ClienteController {
                 saved.getClienteInscricaoMunicipal(),
                 saved.getClienteInscricaoEstadual(), // nome correto
                 saved.getClienteSituacao(),
-                saved.getClienteSituacao(),
-                saved.getCreatedAt()                 // último
+                saved.getCreatedAt()        // último
         );
 
         return ResponseEntity
-                .created(URI.create("/clientes/" + saved.getId()))
+                .created(URI.create("/clientes/" + saved.getClienteid()))
                 .body(response);
     }
 
@@ -78,22 +77,21 @@ public class ClienteController {
     public ResponseEntity<List<ClienteResponseDTO>> getAll() {
         List<ClienteResponseDTO> clientes = clienteRepository.findAll().stream()
                 .map(c -> new ClienteResponseDTO(
-                        c.getId(),
+                        c.getClienteid(),
                         c.getClienteNome(),
                         c.getClienteCnpjCpf(),
                         c.getClienteEmail(),
                         c.getClienteTelefone(),
                         c.getClienteCelular(),
                         c.getClienteEndereco(),
-                        c.getClienteCidade(),
-                        c.getClienteBairro(),
+                        c.getClienteBairro(),          // bairro
+                        c.getClienteCidade(),          // cidade
                         c.getClienteEstado(),
                         c.getClienteNacionalidade(),
                         c.getClienteNumeroCasa(),
                         c.getClienteComplemento(),
                         c.getClienteInscricaoMunicipal(),
                         c.getClienteInscricaoEstadual(),
-                        c.getClienteInscricaoMunicipal(),
                         c.getClienteSituacao(),
                         c.getCreatedAt()
                 ))

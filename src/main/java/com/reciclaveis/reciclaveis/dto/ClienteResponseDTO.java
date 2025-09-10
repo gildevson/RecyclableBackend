@@ -1,7 +1,10 @@
 package com.reciclaveis.reciclaveis.dto;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 public record ClienteResponseDTO(
-        java.util.UUID id,
+        UUID clienteId,
         String clienteNome,
         String clienteCnpjCpf,
         String clienteEmail,
@@ -17,5 +20,5 @@ public record ClienteResponseDTO(
         String clienteInscricaoMunicipal,
         String clienteInscricaoEstadual,
         String clienteSituacao,
-        String situacao, java.time.LocalDateTime createdAt
+        LocalDateTime createdAt
 ) {}

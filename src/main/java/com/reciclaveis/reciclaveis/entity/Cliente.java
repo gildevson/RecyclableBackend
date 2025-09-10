@@ -14,7 +14,7 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID) // Hibernate 6+
-    private UUID id;
+    private UUID clienteid;
     private String clienteNome;
 
     @Column(unique = true)
