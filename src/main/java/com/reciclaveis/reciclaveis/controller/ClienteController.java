@@ -16,7 +16,6 @@ import java.util.List;
 public class ClienteController {
 
     private final ClienteRepository clienteRepository;
-
     public ClienteController(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
@@ -31,6 +30,7 @@ public class ClienteController {
 
         Cliente entity = new Cliente();
         entity.setClienteNome(dto.clienteNome());
+        entity.setClienteRazao(dto.clienteRazao());
         entity.setClienteCnpjCpf(dto.clienteCnpjCpf());
         entity.setClienteEmail(dto.clienteEmail());
         entity.setClienteTelefone(dto.clienteTelefone());
@@ -51,9 +51,10 @@ public class ClienteController {
         ClienteResponseDTO response = new ClienteResponseDTO(
                 saved.getClienteid(),
                 saved.getClienteNome(),
+                saved.getClienteRazao(),
                 saved.getClienteCnpjCpf(),
-                saved.getClienteEmail(),              // email 1º
-                saved.getClienteTelefone(),           // telefone 2º
+                saved.getClienteEmail(),
+                saved.getClienteTelefone(),
                 saved.getClienteCelular(),
                 saved.getClienteEndereco(),
                 saved.getClienteBairro(),
@@ -63,9 +64,9 @@ public class ClienteController {
                 saved.getClienteNumeroCasa(),
                 saved.getClienteComplemento(),
                 saved.getClienteInscricaoMunicipal(),
-                saved.getClienteInscricaoEstadual(), // nome correto
+                saved.getClienteInscricaoEstadual(),
                 saved.getClienteSituacao(),
-                saved.getCreatedAt()        // último
+                saved.getCreatedAt()
         );
 
         return ResponseEntity
@@ -79,13 +80,14 @@ public class ClienteController {
                 .map(c -> new ClienteResponseDTO(
                         c.getClienteid(),
                         c.getClienteNome(),
+                        c.getClienteRazao(),
                         c.getClienteCnpjCpf(),
                         c.getClienteEmail(),
                         c.getClienteTelefone(),
                         c.getClienteCelular(),
                         c.getClienteEndereco(),
-                        c.getClienteBairro(),          // bairro
-                        c.getClienteCidade(),          // cidade
+                        c.getClienteBairro(),
+                        c.getClienteCidade(),
                         c.getClienteEstado(),
                         c.getClienteNacionalidade(),
                         c.getClienteNumeroCasa(),

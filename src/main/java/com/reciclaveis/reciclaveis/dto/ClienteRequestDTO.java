@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 public record ClienteRequestDTO(
         @NotBlank String clienteNome,
+        String clienteRazao,
         @NotBlank String clienteCnpjCpf,
         @Email String clienteEmail,
         String clienteTelefone,

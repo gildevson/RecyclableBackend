@@ -3,7 +3,6 @@ package com.reciclaveis.reciclaveis.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,6 +15,7 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.UUID) // Hibernate 6+
     private UUID clienteid;
     private String clienteNome;
+    private String clienteRazao;
 
     @Column(unique = true)
     private String clienteCnpjCpf;
@@ -32,7 +32,6 @@ public class Cliente {
     private String clienteInscricaoMunicipal;
     private String clienteInscricaoEstadual;
     private String clienteSituacao;
-
 
     @CreationTimestamp
     private LocalDateTime createdAt; // renomeado
