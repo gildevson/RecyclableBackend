@@ -35,6 +35,7 @@ public class ClienteController {
         entity.setClienteEmail(dto.clienteEmail());
         entity.setClienteTelefone(dto.clienteTelefone());
         entity.setClienteCelular(dto.clienteCelular());
+        entity.setClienteNomeContato(dto.clienteNomeContato());
         entity.setClienteEndereco(dto.clienteEndereco());
         entity.setClienteCidade(dto.clienteCidade());
         entity.setClienteBairro(dto.clienteBairro());
@@ -56,6 +57,7 @@ public class ClienteController {
                 saved.getClienteEmail(),
                 saved.getClienteTelefone(),
                 saved.getClienteCelular(),
+                saved.getClienteNomeContato(),
                 saved.getClienteEndereco(),
                 saved.getClienteBairro(),
                 saved.getClienteCidade(),

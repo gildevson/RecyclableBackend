@@ -19,9 +19,10 @@ public class Cliente {
 
     @Column(unique = true)
     private String clienteCnpjCpf;
-    private String clienteTelefone;
     private String clienteEmail;
+    private String clienteTelefone;
     private String clienteCelular;
+    private String clienteNomeContato;
     private String clienteEndereco;
     private String clienteBairro;
     private String clienteCidade;

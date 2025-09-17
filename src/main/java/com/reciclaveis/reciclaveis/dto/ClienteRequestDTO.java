@@ -12,6 +12,7 @@ public record ClienteRequestDTO(
         @Email String clienteEmail,
         String clienteTelefone,
         String clienteCelular,
+        String clienteNomeContato,
         String clienteEndereco,
         String clienteBairro,
         String clienteCidade,
