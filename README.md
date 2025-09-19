@@ -1,4 +1,4 @@
-# Getting Started
+# Sistemas de Gestão de reiclaveis
 
 ### Reference Documentation
 For further reference, please consider the following sections:
