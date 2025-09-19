@@ -8,99 +8,100 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/clientes")
+@CrossOrigin(origins = {"http://localhost:5173","http://localhost:3000"}, allowCredentials = "true")
 public class ClienteController {
 
-    private final ClienteRepository clienteRepository;
-    public ClienteController(ClienteRepository clienteRepository) {
-        this.clienteRepository = clienteRepository;
-    }
+    private final ClienteRepository repo;
+    public ClienteController(ClienteRepository repo) { this.repo = repo; }
 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody ClienteRequestDTO dto) {
-
-        // valida duplicidade
-        if (dto.clienteCnpjCpf() != null && clienteRepository.existsByClienteCnpjCpf(dto.clienteCnpjCpf())) {
+        if (dto.clienteCnpjCpf()!=null && repo.existsByClienteCnpjCpf(dto.clienteCnpjCpf())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("CNPJ já cadastrado");
         }
-
-        Cliente entity = new Cliente();
-        entity.setClienteNome(dto.clienteNome());
-        entity.setClienteRazao(dto.clienteRazao());
-        entity.setClienteCnpjCpf(dto.clienteCnpjCpf());
-        entity.setClienteEmail(dto.clienteEmail());
-        entity.setClienteTelefone(dto.clienteTelefone());
-        entity.setClienteCelular(dto.clienteCelular());
-        entity.setClienteNomeContato(dto.clienteNomeContato());
-        entity.setClienteEndereco(dto.clienteEndereco());
-        entity.setClienteCidade(dto.clienteCidade());
-        entity.setClienteBairro(dto.clienteBairro());
-        entity.setClienteEstado(dto.clienteEstado());
-        entity.setClienteNacionalidade(dto.clienteNacionalidade());
-        entity.setClienteNumeroCasa(dto.clienteNumeroCasa());
-        entity.setClienteComplemento(dto.clienteComplemento());
-        entity.setClienteInscricaoMunicipal(dto.clienteInscricaoMunicipal());
-        entity.setClienteInscricaoEstadual(dto.clienteInscricaoEstadual());
-        entity.setClienteSituacao(dto.clienteSituacao());
-        entity.setCreatedAt(dto.createdAt());
-
-        Cliente saved = clienteRepository.save(entity);
-        ClienteResponseDTO response = new ClienteResponseDTO(
-                saved.getClienteid(),
-                saved.getClienteNome(),
-                saved.getClienteRazao(),
-                saved.getClienteCnpjCpf(),
-                saved.getClienteEmail(),
-                saved.getClienteTelefone(),
-                saved.getClienteCelular(),
-                saved.getClienteNomeContato(),
-                saved.getClienteEndereco(),
-                saved.getClienteBairro(),
-                saved.getClienteCidade(),
-                saved.getClienteEstado(),
-                saved.getClienteNacionalidade(),
-                saved.getClienteNumeroCasa(),
-                saved.getClienteComplemento(),
-                saved.getClienteInscricaoMunicipal(),
-                saved.getClienteInscricaoEstadual(),
-                saved.getClienteSituacao(),
-                saved.getCreatedAt()
-        );
-
-        return ResponseEntity
-                .created(URI.create("/clientes/" + saved.getClienteid()))
-                .body(response);
+        Cliente e = new Cliente();
+        copy(dto, e);
+        Cliente saved = repo.save(e);
+        return ResponseEntity.created(URI.create("/clientes/"+saved.getClienteid()))
+                .body(toResponse(saved));
     }
 
     @GetMapping
     public ResponseEntity<List<ClienteResponseDTO>> getAll() {
-        List<ClienteResponseDTO> clientes = clienteRepository.findAll().stream()
-                .map(c -> new ClienteResponseDTO(
-                        c.getClienteid(),
-                        c.getClienteNome(),
-                        c.getClienteRazao(),
-                        c.getClienteCnpjCpf(),
-                        c.getClienteEmail(),
-                        c.getClienteTelefone(),
-                        c.getClienteCelular(),
-                        c.getClienteEndereco(),
-                        c.getClienteBairro(),
-                        c.getClienteCidade(),
-                        c.getClienteEstado(),
-                        c.getClienteNacionalidade(),
-                        c.getClienteNumeroCasa(),
-                        c.getClienteComplemento(),
-                        c.getClienteInscricaoMunicipal(),
-                        c.getClienteInscricaoEstadual(),
-                        c.getClienteSituacao(),
-                        c.getCreatedAt()
-                ))
-                .toList();
+        return ResponseEntity.ok(
+                repo.findAll().stream().map(this::toResponse).toList()
+        );
+    }
 
-        return ResponseEntity.ok(clientes);
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getById(@PathVariable UUID id) {
+        return repo.findById(id)
+                .<ResponseEntity<Object>>map(c -> ResponseEntity.ok(toResponse(c)))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado"));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable UUID id, @Valid @RequestBody ClienteRequestDTO dto) {
+        return repo.findById(id).map(existing -> {
+            if (dto.clienteCnpjCpf()!=null &&
+                    repo.existsByClienteCnpjCpfAndClienteidNot(dto.clienteCnpjCpf(), id)) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("CNPJ já cadastrado");
+            }
+            copy(dto, existing);
+            Cliente saved = repo.save(existing);
+            return ResponseEntity.ok(toResponse(saved));
+        }).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado"));
+    }
+
+    private void copy(ClienteRequestDTO d, Cliente e) {
+        e.setClienteNome(d.clienteNome());
+        e.setClienteRazao(d.clienteRazao());
+        e.setClienteCnpjCpf(d.clienteCnpjCpf());
+        e.setClienteEmail(d.clienteEmail());
+        e.setClienteTelefone(d.clienteTelefone());
+        e.setClienteCelular(d.clienteCelular());
+        e.setClienteNomeContato(d.clienteNomeContato());
+        e.setClienteEndereco(d.clienteEndereco());
+        e.setClienteBairro(d.clienteBairro());
+        e.setClienteCidade(d.clienteCidade());
+        e.setClienteEstado(d.clienteEstado());
+        e.setClienteNacionalidade(d.clienteNacionalidade());
+        e.setClienteNumeroCasa(d.clienteNumeroCasa());
+        e.setClienteComplemento(d.clienteComplemento());
+        e.setClienteInscricaoMunicipal(d.clienteInscricaoMunicipal());
+        e.setClienteInscricaoEstadual(d.clienteInscricaoEstadual());
+        e.setClienteSituacao(d.clienteSituacao());
+        // createdAt fica com @CreationTimestamp (não copie do request)
+    }
+
+    private ClienteResponseDTO toResponse(Cliente c) {
+        return new ClienteResponseDTO(
+                c.getClienteid(),
+                c.getClienteNome(),
+                c.getClienteRazao(),
+                c.getClienteCnpjCpf(),
+                c.getClienteEmail(),
+                c.getClienteTelefone(),
+                c.getClienteCelular(),
+                c.getClienteNomeContato(),
+                c.getClienteEndereco(),
+                c.getClienteBairro(),
+                c.getClienteCidade(),
+                c.getClienteEstado(),
+                c.getClienteNacionalidade(),
+                c.getClienteNumeroCasa(),
+                c.getClienteComplemento(),
+                c.getClienteInscricaoMunicipal(),
+                c.getClienteInscricaoEstadual(),
+                c.getClienteSituacao(),
+                c.getCreatedAt()
+        );
     }
 }
