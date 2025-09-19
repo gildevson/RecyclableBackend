@@ -1,5 +1,13 @@
 # Sistemas de Gestão de reiclaveis
 
+
+# Recicláveis — Guia de Arquitetura e Estrutura
+
+Este projeto segue a arquitetura **em camadas** (MVC + Services), separando responsabilidades entre **Controllers**, **Services**, **Repositories**, **Entities** e **DTOs**, com **segurança** via Spring Security + JWT, **e-mails** (SMTP) e **reset de senha** por token.
+
+## Visão Geral (fluxo de requisição)
+
+
 ### Reference Documentation
 For further reference, please consider the following sections:
 
