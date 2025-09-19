@@ -35,6 +35,77 @@ While most of the inheritance is fine, it also inherits unwanted elements like `
 To prevent this, the project POM contains empty overrides for these elements.
 If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
 
+###
+
+
+- **Controller**: expõe endpoints REST (HTTP), valida e orquestra chamadas.
+- **Service**: contém a **regra de negócio** e transações (@Transactional).
+- **Repository**: abstrai o **acesso a dados** (JPA/Hibernate).
+- **Entity**: mapeia **tabelas** do banco (JPA).
+- **DTO**: contratos de **entrada/saída** da API (view models).
+- **Security/Util**: autenticação JWT, hashing, helpers.
+- **Email**: envio de mensagens (SMTP) e fluxos de confirmação/recuperação.
+
+---
+
+## Estrutura de Pacotes
+
+```text
+java/com/reciclaveis/reciclaveis
+├── config/
+│   ├── EmailStartupTest.java        # Health check de e-mail (opcional)
+│   └── SecurityConfig.java          # Config do Spring Security + JWT
+│
+├── controller/
+│   ├── AuthController.java          # /auth (login, refresh) 
+│   ├── ClienteController.java       # /clientes (CRUD)
+│   ├── EmailController.java         # /email (envio direto, se exposto)
+│   ├── PasswordResetController.java # /password (forgot/reset)
+│   ├── PermissionController.java    # /permissions (gestão de perfis)
+│   ├── TestEmailController.java     # /email/test (diagnóstico)
+│   ├── UserController.java          # /users (CRUD, perfis, senha)
+│   └── UtilsController.java         # utilidades/health/version/etc.
+│
+├── dto/
+│   ├── AuthResponseDTO.java         # resposta do login (token, expiração, user)
+│   ├── ClienteRequestDTO.java       # entrada para criar/editar cliente
+│   ├── ClienteResponseDTO.java      # saída com dados do cliente
+│   ├── EmailRequestDTO.java         # payload de envio de e-mail
+│   ├── ForgotPasswordRequestDTO.java# entrada: e-mail para recuperar senha
+│   ├── LoginDTO.java                # {email, senha}
+│   ├── PermissionDTO.java           # dados de permissões
+│   ├── ResetPasswordDTO.java        # {token, novaSenha}
+│   └── UserDTO.java                 # dados públicos do usuário
+│
+├── entity/
+│   ├── Cliente.java                 # @Entity cliente
+│   ├── PasswordResetToken.java      # @Entity token de reset (userId, expira)
+│   ├── Permission.java              # @Entity permissão/role
+│   └── User.java                    # @Entity usuário (email, hash, roles)
+│
+├── repository/
+│   ├── ClienteRepository.java       # JpaRepository<Cliente, ID>
+│   ├── PasswordResetTokenRepository.java
+│   ├── PermissionRepository.java
+│   ├── UserRepository.java
+│   └── UsuarioRepository.java       # (separado? avaliar consolidar com User)
+│
+├── service/
+│   ├── AuthService.java             # autenticação, geração de JWT, refresh
+│   ├── EmailService.java            # envio de e-mails
+│   ├── PasswordResetService.java    # criação/validação de tokens, trocar senha
+│   └── UserService.java             # regras de usuário (CRUD, senha, perfis)
+│
+├── util/
+│   ├── AuthValidator.java           # validações de login/fluxos auth
+│   ├── AuthenticatedUserProvider.java# helper p/ pegar usuário atual (Security)
+│   ├── JwtKeyGenerator.java         # geração/carregamento da chave JWT
+│   ├── JwtService.java              # gerar/validar tokens, claims
+│   └── PasswordHasher.java          # BCrypt encoder/validator
+│
+└── ReciclaveisApplication.java      # classe principal Spring Boot
+
+
 ### Referência das Dependências
 
 - **spring-boot-starter-data-jpa**  
